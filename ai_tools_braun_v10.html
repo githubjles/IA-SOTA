@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>AI Tools · Braun · Juni 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --paper:#F2F0EB;--white:#FFFFFF;--rule:#D8D5CC;--mid:#888480;
+  --b1:#4c402a;--b2:#5f6742;--b3:#9eaa96;--b4:#bcc9b4;
+  --b5:#ad9c62;--b6:#cab368;--b7:#e2d19b;--b8:#ce9a7c;--b9:#bc573e;
+  --ff:'DM Sans','Helvetica Neue',system-ui,sans-serif;
+}
+body{background:var(--paper);font-family:var(--ff);color:var(--b1);-webkit-font-smoothing:antialiased;max-width:960px;margin:0 auto;}
+
+/* HEADER */
+.hdr{background:var(--b1);padding:36px 40px 32px;display:grid;grid-template-columns:1fr auto;align-items:end;gap:24px;}
+.eyebrow{font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--b7);margin-bottom:12px;font-weight:300;}
+.hdr-title{font-size:68px;font-weight:700;line-height:.85;letter-spacing:-.05em;color:var(--paper);}
+.hdr-title em{font-style:normal;color:var(--b6);}
+.hdr-right{text-align:right;padding-bottom:2px;}
+.hdr-date{font-size:9px;color:var(--b7);letter-spacing:.14em;margin-bottom:14px;font-weight:300;text-transform:uppercase;}
+.hdr-stat{margin-bottom:4px;}
+.hdr-stat strong{font-size:44px;font-weight:700;color:var(--paper);line-height:.85;display:block;letter-spacing:-.04em;}
+.hdr-stat span{font-size:9px;color:var(--b7);letter-spacing:.12em;text-transform:uppercase;font-weight:300;}
+
+/* PLATFORM */
+.plat{margin-top:4px;}
+.plat-bar{height:3px;}
+.plat-head{display:grid;grid-template-columns:90px 1fr;background:var(--white);border:1px solid var(--rule);border-top:none;border-bottom:none;}
+.plat-numblock{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 0;gap:3px;}
+.plat-bignum{font-size:44px;font-weight:700;line-height:1;letter-spacing:-.04em;}
+.plat-sublabel{font-size:7.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;}
+.plat-meta{padding:18px 26px 16px;display:flex;flex-direction:column;justify-content:center;gap:4px;}
+.plat-row1{display:flex;align-items:baseline;gap:12px;}
+.plat-name{font-size:26px;font-weight:700;letter-spacing:-.03em;line-height:1;}
+.plat-maker{font-size:9px;color:var(--mid);letter-spacing:.08em;text-transform:uppercase;}
+.plat-models{font-size:9.5px;color:var(--mid);font-weight:300;}
+
+/* GRID & CARDS */
+.cards-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:16px;background:var(--paper);border:1px solid var(--rule);border-top:none;border-radius:0 0 12px 12px;}
+.card{background:var(--white);border-radius:20px;padding:28px 22px 22px;display:flex;flex-direction:column;align-items:flex-start;position:relative;box-shadow:0 1px 3px rgba(76,64,42,.08),0 0 0 1px rgba(76,64,42,.05);transition:box-shadow .18s,transform .18s;cursor:default;min-height:205px;}
+.card:hover{box-shadow:0 4px 16px rgba(76,64,42,.13),0 0 0 1px rgba(76,64,42,.08);transform:translateY(-2px);}
+.card-ico{width:24px;height:24px;color:var(--b1);margin-bottom:20px;display:block;}
+.card-ico svg{width:24px;height:24px;}
+.card-name{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--b1);line-height:1.25;margin-bottom:8px;}
+.card-desc{font-size:11px;color:var(--mid);line-height:1.65;font-weight:400;flex:1;margin-bottom:16px;}
+.card-foot{display:flex;align-items:center;justify-content:space-between;width:100%;margin-top:auto;gap:8px;}
+.card-link{font-size:9px;color:var(--mid);letter-spacing:.06em;text-transform:uppercase;text-decoration:none;font-weight:500;display:flex;align-items:center;gap:3px;opacity:.6;transition:opacity .15s;}
+.card-link:hover{opacity:1;color:var(--b1);}
+.card-cat{display:inline-block;width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-left:auto;}
+
+/* TOOLTIP */
+.tt-btn{position:absolute;top:14px;right:14px;width:22px;height:22px;border-radius:50%;background:var(--paper);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:10px;font-weight:700;color:var(--b1);font-family:var(--ff);transition:background .12s;z-index:2;user-select:none;border:1px solid var(--rule);}
+.tt-btn:hover{background:var(--b7);border-color:var(--b5);}
+.tt-box{display:none;position:absolute;top:42px;right:10px;width:228px;background:var(--b1);color:var(--paper);border-radius:10px;padding:14px 16px;font-size:10px;line-height:1.6;font-weight:300;z-index:100;box-shadow:0 6px 20px rgba(76,64,42,.3);}
+.tt-box::before{content:'';position:absolute;top:-5px;right:14px;width:10px;height:10px;background:var(--b1);clip-path:polygon(50% 0%,100% 100%,0% 100%);}
+.tt-label{font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--b6);font-weight:700;margin-bottom:6px;display:block;}
+.tt-box.open{display:block;}
+
+/* CATEGORY DOTS */
+/* b1 dark brown, b2 olive, b3 sage, b5 gold, b8 terracotta, b9 red */
+.dot-n{background:var(--b1);} .dot-a{background:var(--b2);}
+.dot-m{background:var(--b8);} .dot-d{background:var(--b5);}
+.dot-i{background:var(--b3);} .dot-o{background:var(--b2);}
+.dot-e{background:var(--b6);} .dot-r{background:var(--b9);}
+
+/* LEGEND */
+.legend{padding:12px 4px 16px;display:flex;gap:16px;flex-wrap:wrap;align-items:center;}
+.leg{display:flex;align-items:center;gap:6px;font-size:9px;letter-spacing:.09em;text-transform:uppercase;color:var(--mid);}
+.leg-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.poster{display:flex;flex-direction:column;gap:1px;}
+</style>
+</head>
+<body>
+<div class="poster">
+
+<div class="hdr">
+  <div>
+    <div class="eyebrow">Estado del arte · AI Platforms · Junio 2026</div>
+    <div class="hdr-title">AI<br>TOOLS<em>.</em></div>
+  </div>
+  <div class="hdr-right">
+    <div class="hdr-date">Juni 2026</div>
+    <div class="hdr-stat"><strong>4</strong><span>plataformas</span></div>
+    <div class="hdr-stat" style="margin-top:10px;"><strong>36</strong><span>herramientas</span></div>
+  </div>
+</div>
+
+<!-- 01 CLAUDE — numblock b9(#bc573e), text white (4.59:1 ✓) -->
+<div class="plat">
+  <div class="plat-bar" style="background:"></div>
+  <div class="plat-head">
+    <div class="plat-numblock" style="background:#bc573e">
+      <div class="plat-bignum" style="color:#FFFFFF">01</div>
+      <div class="plat-sublabel" style="color:#FFFFFF;opacity:.6">Platform</div>
+    </div>
+    <div class="plat-meta">
+      <div class="plat-row1"><div class="plat-name" style="color:var(--b9)">Claude</div><div class="plat-maker">Anthropic</div></div>
+      <div class="plat-models">Opus 4.8 · Sonnet 4.6 · Haiku 4.5 · Mythos Preview · 1M ctx</div>
+    </div>
+  </div>
+  <div class="cards-grid">
+
+    <div class="card">
+      <div class="tt-btn" onclick="toggleTT(this)">?</div>
+      <div class="tt-box"><span class="tt-label">Arquitectura / Consultoría / Datos</span>Normativa técnica actualizada, precios de materiales, jurisprudencia sectorial para informes técnicos, certificaciones ambientales o de calidad.</div>
+      <div class="card-ico"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 0 -9 9" /> <path d="M3.6 9h16.8" /> <path d="M3.6 15h7.9" /> <path d="M11.5 3a17 17 0 0 0 0 18" /> <path d="M12.5 3a16.984 16.984 0 0 1 2.574 8.62" /> <path d="M15 18a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /> <path d="M20.2 20.2l1.8 1.8" /></svg></div>
+      <div class="card-name">Búsqueda web</div>
+      <div class="card-desc">Información actualizada integrada en conversación con citas verificadas.</div>
+      <div class="card-foot"><a class="card-link" href="https://claude.ai" target="_blank">claude.ai <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7l-10 10" /> <path d="M8 7l9 0l0 9" /></svg></a><span class="card-cat dot-n"></span></div>
+    </div>
+    <div class="card">
+      <div class="tt-btn" onclick="toggleTT(this)">?</div>
+      <div class="tt-box"><span class="tt-label">Arquitectura / Consultoría / Datos</span>Análisis de informes técnicos en PDF, contratos, expedientes, hojas de cálculo de costes y fichas de producto en un mismo contexto de trabajo.</div>
+      <div class="card-ico"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3v4a1 1 0 0 0 1 1h4" /> <path d="M18 17h-7a2 2 0 0 1 -2 -2v-10a2 2 0 0 1 2 -2h4l5 5v7a2 2 0 0 1 -2 2" /> <path d="M16 17v2a2 2 0 0 1 -2 2h-7a2 2 0 0 1 -2 -2v-10a2 2 0 0 1 2 -2h2" /></svg></div>
+      <div class="card-name">Análisis de archivos</div>
+      <div class="card-desc">PDF, docx, xlsx, imágenes. Contexto 200K–1M tokens por sesión.</div>
+      <div class="card-foot"><a class="card-link" href="https://claude.ai" target="_blank">claude.ai <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7l-10 10" /> <path d="M8 7l9 0l0 9" /></svg></a><span class="card-cat dot-n"></span></div>
+    </div>
+    <div class="card">
+      <div class="tt-btn" onclick="toggleTT(this)">?</div>
+      <div class="tt-box"><span class="tt-label">Consultoría técnica / Peritaje</span>Razonar cadenas de responsabilidad, calcular penalizaciones complejas, construir argumentos técnicos o periciales paso a paso con trazabilidad total.</div>
+      <div class="card-ico"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15.5 13a3.5 3.5 0 0 0 -3.5 3.5v1a3.5 3.5 0 0 0 7 0v-1.8" /> <path d="M8.5 13a3.5 3.5 0 0 1 3.5 3.5v1a3.5 3.5 0 0 1 -7 0v-1.8" /> <path d="M17.5 16a3.5 3.5 0 0 0 0 -7h-.5" /> <path d="M19 9.3v-2.8a3.5 3.5 0 0 0 -7 0" /> <path d="M6.5 16a3.5 3.5 0 0 1 0 -7h.5" /> <path d="M5 9.3v-2.8a3.5 3.5 0 0 1 7 0v10" /></svg></div>
+      <div class="card-name">Razonamiento extendido</div>
+      <div class="card-desc">Effort control configurable. Opus 4.8: 96.7% USAMO. Adaptive thinking.</div>
+      <div class="card-foot"><a class="card-link" href="https://claude.ai" target="_blank">claude.ai <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7l-10 10" /> <path d="M8 7l9 0l0 9" /></svg></a><span class="card-cat dot-n"></span></div>
+    </div>
+    <div class="card">
+      <div class="tt-btn" onclick="toggleTT(this)">?</div>
+      <div class="tt-box"><span class="tt-label">Plataformas de datos / Ingeniería</span>Automatizar parseo de formatos técnicos complejos, validar datos contra estándares internacionales, scripts de normalización y pipelines en paralelo.</div>
+      <div class="card-ico"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 9l3 3l-3 3" /> <path d="M13 15l3 0" /> <path d="M3 6a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2l0 -12" /></svg></div>
+      <div class="card-name">Claude Code</div>
+      <div class="card-desc">Agente terminal. Dynamic Workflows paralelos. Migraciones a escala de repo.</div>
+      <div class="card-foot"><a class="card-link" href="https://claude.ai/code" target="_blank">claude.ai/code <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7l-10 10" /> <path d="M8 7l9 0l0 9" /></svg></a><span class="card-cat dot-a"></span></div>
+    </div>
+    <div class="card">
+      <div class="tt-btn" onclick="toggleTT(this)">?</div>
+      <div class="tt-box"><span class="tt-label">Arquitectura / Consultoría</span>Rellenar formularios administrativos, navegar plataformas de certificación, extraer datos de registros públicos sin intervención manual.</div>
+      <div class="card-ico"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12.5 16h-8.5a1 1 0 0 1 -1 -1v-10a1 1 0 0 1 1 -1h16a1 1 0 0 1 1 1v8" /> <path d="M7 20h4" /> <path d="M9 16v4" /> <path d="M20 21l2 -2l-2 -2" /> <path d="M17 17l-2 2l2 2" /></svg></div>
+      <div class="card-name">Computer Use</div>
+      <div class="card-desc">Controla escritorio: navega, hace clic y automatiza el SO.</div>
+      <div class="card-foot"><a class="card-link" href="https://claude.ai" target="_blank">claude.ai <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7l-10 10" /> <path d="M8 7l9 0l0 9" /></svg></a><span class="card-cat dot-a"></span></div>
+    </div>
+    <div class="card">
+      <div class="tt-btn" onclick="toggleTT(this)">?</div>
+      <div class="tt-box"><span class="tt-label">Todas las áreas</span>Conectar bases de datos internas, correo, almacenamiento y herramientas de comunicación del equipo mediante un protocolo estándar abierto.</div>
+      <div class="card-ico"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 4v4c-6.575 1.028 -9.02 6.788 -10 12c-.037 .206 5.384 -5.962 10 -6v4l8 -7l-8 -7" /></svg></div>
+      <div class="card-name">MCP</div>
+      <div class="card-desc">Conecta Gmail, Drive, Slack, Supabase vía protocolo estándar abierto.</div>
+      <div class="card-foot"><a class="card-link" href="https://docs.anthropic.com" target="_blank">docs MCP <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7l-10 10" /> <path d="M8 7l9 0l0 9" /></svg></a><span class="card-cat dot-i"></span></div>
+    </div>
+    <div class="card">
+      <div class="tt-btn" onclick="toggleTT(this)">?</div>
+      <div class="tt-box"><span class="tt-label">Todas las áreas</span>Un proyecto por área de negocio con instrucciones y contexto propio: técnico-legal, medioambiental, comercial. Sin mezclar contextos entre encargos.</div>
+      <div class="card-ico"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l6 0" /> <path d="M14 4l6 0" /> <path d="M4 10a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2l0 -8" /> <path d="M14 10a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v2a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2l0 -2" /></svg></div>
+      <div class="card-name">Proyectos + Skills</div>
+      <div class="card-desc">Contexto persistente por proyecto. Instrucciones especializadas reutilizables.</div>
+      <div class="card-foot"><a class="card-link" href="https://claude.ai" target="_blank">claude.ai <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7l-10 10" /> <path d="M8 7l9 0l0 9" /></svg></a><span class="card-cat dot-i"></span></div>
+    </div>
+    <div class="card">
+      <div class="tt-btn" onclick="toggleTT(this)">?</div>
+      <div class="tt-box"><span class="tt-label">Datos / Comunicación</span>Dashboards SVG de indicadores técnicos, visualizadores de impacto ambiental, comparativas interactivas de materiales o productos para presentaciones.</div>
+      <div class="card-ico"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14l-2 -2l2 -2" /> <path d="M14 10l2 2l-2 2" /> <path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /></svg></div>
+      <div class="card-name">Artifacts</div>
+      <div class="card-desc">HTML, React, SVG interactivos en panel lateral editable en tiempo real.</div>
+      <div class="card-foot"><a class="card-link" href="https://claude.ai" target="_blank">claude.ai <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7l-10 10" /> <path d="M8 7l9 0l0 9" /></svg></a><span class="card-cat dot-d"></span></div>
+    </div>
+    <div class="card">
+      <div class="tt-btn" onclick="toggleTT(this)">?</div>
+      <div class="tt-box"><span class="tt-label">Comunicación / Comercial</span>Prototipar dossiers comerciales, infografías técnicas, mockups de presentaciones para clientes o inversores, programas de eventos corporativos.</div>
+      <div class="card-ico"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1l0 -2" /> <path d="M17 15a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1l0 -2" /> <path d="M10 7a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1l0 -2" /> <path d="M10 8.5a6 6 0 0 0 -5 5.5" /> <path d="M14 8.5a6 6 0 0 1 5 5.5" /> <path d="M10 8l-6 0" /> <path d="M20 8l-6 0" /> <path d="M2 8a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /> <path d="M20 8a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /></svg></div>
+      <div class="card-name">Claude Design</div>
+      <div class="card-desc">Canvas visual para prototipos, slides y UI desde prompts. Handoff a Claude Code.</div>
+      <div class="card-foot"><a class="card-link" href="https://claude.ai/design" target="_blank">claude.ai/design <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7l-10 10" /> <path d="M8 7l9 0l0 9" /></svg></a><span class="card-cat dot-d"></span></div>
+    </div>
+  </div>
+</div>
+
+<!-- 02 GEMINI — numblock b2(#5f6742), text white (5.99:1 ✓) -->
+<div class="plat">
+  <div class="plat-bar" style="background:"></div>
+  <div class="plat-head">
+    <div class="plat-numblock" style="background:#5f6742">
+      <div class="plat-bignum" style="color:#FFFFFF">02</div>
+      <div class="plat-sublabel" style="color:#FFFFFF;opacity:.6">Platform</div>
+    </div>
+    <div class="plat-meta">
+      <div class="plat-row1"><div class="plat-name" style="color:var(--b2)">Gemini</div><div class="plat-maker">Google DeepMind</div></div>
+      <div class="plat-models">3.5 Flash · 3.1 Pro · Gemini Spark · 1M ctx · 4× velocidad</div>
+    </div>
+  </div>
+  <div class="cards-grid">
+
+    <div class="card">
+      <div class="tt-btn" onclick="toggleTT(this)">?</div>
+      <div class="tt-box"><span class="tt-label">Arquitectura / Comercial</span>Precios de materiales en tiempo real, novedades normativas, comparar proveedores técnicos con datos actualizados directamente del índice de Google.</div>
+      <div class="card-ico"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 12a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /> <path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7" /></svg></div>
+      <div class="card-name">Google Search nativo</div>
+      <div class="card-desc">Índice real de Google. Grounding con Maps y URL Context integrado.</div>
+      <div class="card-foot"><a class="card-link" href="https://gemini.google.com" target="_blank">gemini.google.com <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7l-10 10" /> <path d="M8 7l9 0l0 9" /></svg></a><span class="card-cat dot-n"></span></div>
+    </div>
+    <div class="card">
+      <div class="tt-btn" onclick="toggleTT(this)">?</div>
+      <div class="tt-box"><span class="tt-label">Arquitectura / Consultoría</span>Reuniones por voz, inspecciones en campo con vídeo en tiempo real, dictar anotaciones técnicas de visita sin soltar el portapapeles.</div>
+      <div class="card-ico"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5a3 3 0 0 1 3 -3a3 3 0 0 1 3 3v5a3 3 0 0 1 -3 3a3 3 0 0 1 -3 -3l0 -5" /> <path d="M5 10a7 7 0 0 0 14 0" /> <path d="M8 21l8 0" /> <path d="M12 17l0 4" /></svg></div>
+      <div class="card-name">Gemini Live</div>
+      <div class="card-desc">Voz + vídeo en tiempo real integrado en chat. Detecta emoción.</div>
+      <div class="card-foot"><a class="card-link" href="https://gemini.google.com" target="_blank">gemini.google.com <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7l-10 10" /> <path d="M8 7l9 0l0 9" /></svg></a><span class="card-cat dot-m"></span></div>
+    </div>
+    <div class="card">
+      <div class="tt-btn" onclick="toggleTT(this)">?</div>
+      <div class="tt-box"><span class="tt-label">Comercial / Comunicación</span>Renders conceptuales de proyectos, visualizar acabados o materiales, crear imágenes para dossiers de captación de clientes e inversores.</div>
+      <div class="card-ico"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 8h.01" /> <path d="M10 21h-4a3 3 0 0 1 -3 -3v-12a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v5" /> <path d="M3 16l5 -5c.928 -.893 2.072 -.893 3 0l1 1" /> <path d="M14 21v-4a2 2 0 1 1 4 0v4" /> <path d="M14 19h4" /> <path d="M21 15v6" /></svg></div>
+      <div class="card-name">Imagen 4 / Veo 3</div>
+      <div class="card-desc">Genera imágenes fotorrealistas y vídeo desde texto o imagen de referencia.</div>
+      <div class="card-foot"><a class="card-link" href="https://gemini.google.com" target="_blank">gemini.google.com <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7l-10 10" /> <path d="M8 7l9 0l0 9" /></svg></a><span class="card-cat dot-m"></span></div>
+    </div>
+    <div class="card">
+      <div class="tt-btn" onclick="toggleTT(this)">?</div>
+      <div class="tt-box"><span class="tt-label">Consultoría técnica / Peritaje</span>Investigación profunda multifuente para informes técnicos, análisis de normativa sectorial, cruzar regulaciones con casos previos documentados.</div>
+      <div class="card-ico"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21l6 -5l6 5" /> <path d="M12 13v8" /> <path d="M3.294 13.678l.166 .281c.52 .88 1.624 1.265 2.605 .91l14.242 -5.165a1.023 1.023 0 0 0 .565 -1.456l-2.62 -4.705a1.087 1.087 0 0 0 -1.447 -.42l-.056 .032l-12.694 7.618c-1.02 .613 -1.357 1.897 -.76 2.905l-.001 0" /> <path d="M14 5l3 5.5" /></svg></div>
+      <div class="card-name">Deep Think / Research</div>
+      <div class="card-desc">Razonamiento multihipótesis. 3.5 Flash: 76.2% Terminal-Bench 2.1.</div>
+      <div class="card-foot"><a class="card-link" href="https://gemini.google.com" target="_blank">gemini.google.com <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7l-10 10" /> <path d="M8 7l9 0l0 9" /></svg></a><span class="card-cat dot-n"></span></div>
+    </div>
+    <div class="card">
+      <div class="tt-btn" onclick="toggleTT(this)">?</div>
+      <div class="tt-box"><span class="tt-label">Todas las áreas</span>Asistentes especializados por área: técnica, medioambiental, legal. Cada uno con instrucciones, documentos y herramientas de referencia propias.</div>
+      <div class="card-ico"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v4a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2l0 -4" /> <path d="M12 2v2" /> <path d="M9 12v9" /> <path d="M15 12v9" /> <path d="M5 16l4 -2" /> <path d="M15 14l4 2" /> <path d="M9 18h6" /> <path d="M10 8v.01" /> <path d="M14 8v.01" /></svg></div>
+      <div class="card-name">Gems (asistentes custom)</div>
+      <div class="card-desc">Versiones especializadas con instrucciones y herramientas predefinidas.</div>
+      <div class="card-foot"><a class="card-link" href="https://gemini.google.com" target="_blank">gemini.google.com <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7l-10 10" /> <path d="M8 7l9 0l0 9" /></svg></a><span class="card-cat dot-i"></span></div>
+    </div>
+    <div class="card">
+      <div class="tt-btn" onclick="toggleTT(this)">?</div>
+      <div class="tt-box"><span class="tt-label">Consultoría / Gestión</span>Redactar informes en Docs, seguimiento de proyectos en Sheets, coordinar con clientes y colaboradores por Gmail sin salir del flujo de trabajo.</div>
+      <div class="card-ico"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.945 11a9 9 0 1 1 -3.284 -5.997l-2.655 2.392a5.5 5.5 0 1 0 2.119 6.605h-4.125v-3h7.945" /></svg></div>
+      <div class="card-name">Google Workspace</div>
+      <div class="card-desc">Integrado en Docs, Sheets, Gmail y Meet. Opera en tiempo real.</div>
+      <div class="card-foot"><a class="card-link" href="https://workspace.google.com" target="_blank">workspace <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7l-10 10" /> <path d="M8 7l9 0l0 9" /></svg></a><span class="card-cat dot-i"></span></div>
+    </div>
+    <div class="card">
+      <div class="tt-btn" onclick="toggleTT(this)">?</div>
+      <div class="tt-box"><span class="tt-label">Plataformas de datos</span>Agentes que procesen colecciones de fichas técnicas en batch, validaciones automáticas contra estándares, orquestación de subagentes por tipo de dato.</div>
+      <div class="card-ico"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13h5" /> <path d="M12 16v-8h3a2 2 0 0 1 2 2v1a2 2 0 0 1 -2 2h-3" /> <path d="M20 8v8" /> <path d="M9 16v-5.5a2.5 2.5 0 0 0 -5 0v5.5" /></svg></div>
+      <div class="card-name">Antigravity / Gemini API</div>
+      <div class="card-desc">Plataforma agentic dev. MCP Atlas 83.6%. Agentes en producción.</div>
+      <div class="card-foot"><a class="card-link" href="https://ai.google.dev" target="_blank">ai.google.dev <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7l-10 10" /> <path d="M8 7l9 0l0 9" /></svg></a><span class="card-cat dot-d"></span></div>
+    </div>
+    <div class="card">
+      <div class="tt-btn" onclick="toggleTT(this)">?</div>
+      <div class="tt-box"><span class="tt-label">Arquitectura / Gestión de obra</span>Analizar vídeos de inspección técnica, transcribir y extraer incidencias, revisar registros visuales de obra para informes de seguimiento.</div>
+      <div class="card-ico"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 10l4.553 -2.276a1 1 0 0 1 1.447 .894v6.764a1 1 0 0 1 -1.447 .894l-4.553 -2.276v-4" /> <path d="M3 8a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2l0 -8" /></svg></div>
+      <div class="card-name">Análisis de vídeo largo</div>
+      <div class="card-desc">Vídeos completos en 1M token context. Transcripción y Q&amp;A.</div>
+      <div class="card-foot"><a class="card-link" href="https://gemini.google.com" target="_blank">gemini.google.com <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7l-10 10" /> <path d="M8 7l9 0l0 9" /></svg></a><span class="card-cat dot-m"></span></div>
+    </div>
+    <div class="card">
+      <div class="tt-btn" onclick="toggleTT(this)">?</div>
+      <div class="tt-box"><span class="tt-label">Gestión / Seguimiento</span>Agente continuo que monitoriza plazos, alerta de cambios normativos relevantes y gestiona recordatorios de hitos críticos del proyecto.</div>
+      <div class="card-ico"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 18a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m0 -12a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m-7 12a6 6 0 0 1 6 -6a6 6 0 0 1 -6 -6a6 6 0 0 1 -6 6a6 6 0 0 1 6 6" /></svg></div>
+      <div class="card-name">Gemini Spark (agente)</div>
+      <div class="card-desc">Agente personal 24/7 para Search, Android, YouTube y apps Google.</div>
+      <div class="card-foot"><a class="card-link" href="https://gemini.google.com" target="_blank">gemini.google.com <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7l-10 10" /> <path d="M8 7l9 0l0 9" /></svg></a><span class="card-cat dot-a"></span></div>
+    </div>
+  </div>
+</div>
+
+<!-- 03 CHATGPT — numblock b8(#ce9a7c), text b1 (7.08:1 ✓) -->
+<div class="plat">
+  <div class="plat-bar" style="background:"></div>
+  <div class="plat-head">
+    <div class="plat-numblock" style="background:#ce9a7c">
+      <div class="plat-bignum" style="color:#4c402a">03</div>
+      <div class="plat-sublabel" style="color:#4c402a;opacity:.6">Platform</div>
+    </div>
+    <div class="plat-meta">
+      <div class="plat-row1"><div class="plat-name" style="color:var(--b1)">ChatGPT</div><div class="plat-maker">OpenAI</div></div>
+      <div class="plat-models">GPT-5.5 · GPT-5.5 Instant · GPT-5.5 Thinking · Codex · 1M ctx</div>
+    </div>
+  </div>
+  <div class="cards-grid">
+
+    <div class="card">
+      <div class="tt-btn" onclick="toggleTT(this)">?</div>
+      <div class="tt-box"><span class="tt-label">Consultoría / Arquitectura</span>Verificar precios de mercado para valoraciones técnicas, rastrear actualizaciones normativas en boletines oficiales, buscar precedentes sectoriales.</div>
+      <div class="card-ico"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /> <path d="M21 21l-6 -6" /></svg></div>
+      <div class="card-name">Búsqueda web</div>
+      <div class="card-desc">Web search + Gmail en respuestas. −45% alucinaciones vs GPT-4o.</div>
+      <div class="card-foot"><a class="card-link" href="https://chatgpt.com" target="_blank">chatgpt.com <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7l-10 10" /> <path d="M8 7l9 0l0 9" /></svg></a><span class="card-cat dot-n"></span></div>
+    </div>
+    <div class="card">
+      <div class="tt-btn" onclick="toggleTT(this)">?</div>
+      <div class="tt-box"><span class="tt-label">Comercial / Comunicación</span>Visualizaciones conceptuales de proyectos, infografías de métricas técnicas o ambientales, imágenes para presentaciones a clientes e inversores.</div>
+      <div class="card-ico"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21l15 -15l-3 -3l-15 15l3 3" /> <path d="M15 6l3 3" /> <path d="M9 3a2 2 0 0 0 2 2a2 2 0 0 0 -2 2a2 2 0 0 0 -2 -2a2 2 0 0 0 2 -2" /> <path d="M19 13a2 2 0 0 0 2 2a2 2 0 0 0 -2 2a2 2 0 0 0 -2 -2a2 2 0 0 0 2 -2" /></svg></div>
+      <div class="card-name">DALL-E / Imagen</div>
+      <div class="card-desc">Genera y edita imágenes fotorrealistas directamente desde el chat.</div>
+      <div class="card-foot"><a class="card-link" href="https://chatgpt.com" target="_blank">chatgpt.com <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7l-10 10" /> <path d="M8 7l9 0l0 9" /></svg></a><span class="card-cat dot-m"></span></div>
+    </div>
+    <div class="card">
+      <div class="tt-btn" onclick="toggleTT(this)">?</div>
+      <div class="tt-box"><span class="tt-label">Datos / Análisis técnico</span>Analizar CSV de indicadores técnicos o ambientales, calcular estadísticas comparativas, generar gráficas de resultados directamente en Python.</div>
+      <div class="card-ico"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 8l-4 4l4 4" /> <path d="M17 8l4 4l-4 4" /> <path d="M14 4l-4 16" /></svg></div>
+      <div class="card-name">Análisis de código</div>
+      <div class="card-desc">Python sandbox: CSV, gráficas, transformaciones de archivos.</div>
+      <div class="card-foot"><a class="card-link" href="https://chatgpt.com" target="_blank">chatgpt.com <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7l-10 10" /> <path d="M8 7l9 0l0 9" /></svg></a><span class="card-cat dot-d"></span></div>
+    </div>
+    <div class="card">
+      <div class="tt-btn" onclick="toggleTT(this)">?</div>
+      <div class="tt-box"><span class="tt-label">Plataformas de datos / Ingeniería</span>Procesamiento autónomo de colecciones de datos en formatos técnicos, refactorización de código con Goal Mode, revisión completa de repositorios.</div>
+      <div class="card-ico"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7l5 5l-5 5" /> <path d="M12 19l7 0" /></svg></div>
+      <div class="card-name">Codex (agente coding)</div>
+      <div class="card-desc">Goal Mode GA. Appshots Mac. Computer Use. Tareas de larga duración.</div>
+      <div class="card-foot"><a class="card-link" href="https://chatgpt.com/codex" target="_blank">codex <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7l-10 10" /> <path d="M8 7l9 0l0 9" /></svg></a><span class="card-cat dot-a"></span></div>
+    </div>
+    <div class="card">
+      <div class="tt-btn" onclick="toggleTT(this)">?</div>
+      <div class="tt-box"><span class="tt-label">Todas las áreas</span>Asistente especializado en normativa técnica, otro en análisis de datos ambientales, otro en redacción de informes periciales o técnicos.</div>
+      <div class="card-ico"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /> <path d="M6 21v-2a4 4 0 0 1 4 -4h.5" /> <path d="M17.8 20.817l-2.172 1.138a.392 .392 0 0 1 -.568 -.41l.415 -2.411l-1.757 -1.707a.389 .389 0 0 1 .217 -.665l2.428 -.352l1.086 -2.193a.392 .392 0 0 1 .702 0l1.086 2.193l2.428 .352a.39 .39 0 0 1 .217 .665l-1.757 1.707l.414 2.41a.39 .39 0 0 1 -.567 .411l-2.172 -1.138" /></svg></div>
+      <div class="card-name">GPTs (asistentes custom)</div>
+      <div class="card-desc">Publica asistentes con instrucciones, archivos y herramientas propias.</div>
+      <div class="card-foot"><a class="card-link" href="https://chatgpt.com/gpts" target="_blank">chatgpt.com/gpts <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7l-10 10" /> <path d="M8 7l9 0l0 9" /></svg></a><span class="card-cat dot-i"></span></div>
+    </div>
+    <div class="card">
+      <div class="tt-btn" onclick="toggleTT(this)">?</div>
+      <div class="tt-box"><span class="tt-label">Consultoría técnica / Peritaje</span>Razonar argumentos técnico-jurídicos complejos, calcular importes de responsabilidad con cadenas causales largas, análisis de sobrecostes.</div>
+      <div class="card-ico"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 6a1 1 0 0 1 1 -1h12a1 1 0 0 1 1 1v12a1 1 0 0 1 -1 1h-12a1 1 0 0 1 -1 -1l0 -12" /> <path d="M9 9h6v6h-6l0 -6" /> <path d="M3 10h2" /> <path d="M3 14h2" /> <path d="M10 3v2" /> <path d="M14 3v2" /> <path d="M21 10h-2" /> <path d="M21 14h-2" /> <path d="M14 21v-2" /> <path d="M10 21v-2" /></svg></div>
+      <div class="card-name">GPT-5.5 Thinking</div>
+      <div class="card-desc">Razonamiento profundo. 81.2% AIME 2025. Coding, ciencia, análisis.</div>
+      <div class="card-foot"><a class="card-link" href="https://chatgpt.com" target="_blank">chatgpt.com <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7l-10 10" /> <path d="M8 7l9 0l0 9" /></svg></a><span class="card-cat dot-n"></span></div>
+    </div>
+    <div class="card">
+      <div class="tt-btn" onclick="toggleTT(this)">?</div>
+      <div class="tt-box"><span class="tt-label">Arquitectura / Consultoría</span>Dictar notas técnicas en campo sin manos libres, consultas rápidas de normativa en obra, reuniones de coordinación con equipos o clientes.</div>
+      <div class="card-ico"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15a2 2 0 0 1 2 -2h1a2 2 0 0 1 2 2v3a2 2 0 0 1 -2 2h-1a2 2 0 0 1 -2 -2l0 -3" /> <path d="M15 15a2 2 0 0 1 2 -2h1a2 2 0 0 1 2 2v3a2 2 0 0 1 -2 2h-1a2 2 0 0 1 -2 -2l0 -3" /> <path d="M4 15v-3a8 8 0 0 1 16 0v3" /></svg></div>
+      <div class="card-name">Voz avanzada</div>
+      <div class="card-desc">Conversación en tiempo real. Voz expresiva, detección de emoción.</div>
+      <div class="card-foot"><a class="card-link" href="https://chatgpt.com" target="_blank">chatgpt.com <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7l-10 10" /> <path d="M8 7l9 0l0 9" /></svg></a><span class="card-cat dot-m"></span></div>
+    </div>
+    <div class="card">
+      <div class="tt-btn" onclick="toggleTT(this)">?</div>
+      <div class="tt-box"><span class="tt-label">Consultoría / Gestión</span>Recordar contexto acumulado de cada cliente o encargo, preferencias de formato de informes, historial de decisiones por proyecto entre sesiones.</div>
+      <div class="card-ico"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 10v11l-5 -3l-5 3v-11a3 3 0 0 1 3 -3h4a3 3 0 0 1 3 3" /> <path d="M11 3h5a3 3 0 0 1 3 3v11" /></svg></div>
+      <div class="card-name">Memory</div>
+      <div class="card-desc">Recuerda preferencias y contexto del usuario entre sesiones.</div>
+      <div class="card-foot"><a class="card-link" href="https://chatgpt.com" target="_blank">chatgpt.com <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7l-10 10" /> <path d="M8 7l9 0l0 9" /></svg></a><span class="card-cat dot-i"></span></div>
+    </div>
+    <div class="card">
+      <div class="tt-btn" onclick="toggleTT(this)">?</div>
+      <div class="tt-box"><span class="tt-label">Arquitectura / Datos</span>Subir expedientes completos, planos exportados, hojas de cálculo técnicas y fichas de producto para análisis cruzado en una sola sesión.</div>
+      <div class="card-ico"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3v4a1 1 0 0 0 1 1h4" /> <path d="M5 12v-7a2 2 0 0 1 2 -2h7l5 5v4" /> <path d="M5 21h14" /> <path d="M5 18h14" /> <path d="M5 15h14" /></svg></div>
+      <div class="card-name">Análisis de archivos</div>
+      <div class="card-desc">Hasta 20 archivos por mensaje. 512 MB c/u. PDF, DOCX, CSV, imágenes.</div>
+      <div class="card-foot"><a class="card-link" href="https://chatgpt.com" target="_blank">chatgpt.com <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7l-10 10" /> <path d="M8 7l9 0l0 9" /></svg></a><span class="card-cat dot-n"></span></div>
+    </div>
+  </div>
+</div>
+
+<!-- 04 OTROS — numblock b5(#ad9c62), text b1 (6.39:1 ✓) -->
+<div class="plat">
+  <div class="plat-bar" style="background:"></div>
+  <div class="plat-head">
+    <div class="plat-numblock" style="background:#ad9c62">
+      <div class="plat-bignum" style="color:#4c402a">04</div>
+      <div class="plat-sublabel" style="color:#4c402a;opacity:.6">Platform</div>
+    </div>
+    <div class="plat-meta">
+      <div class="plat-row1"><div class="plat-name" style="color:var(--b5)">Otros modelos</div><div class="plat-maker">Ecosistema global · Open &amp; Closed</div></div>
+      <div class="plat-models">Grok · DeepSeek · Llama · Qwen · Mistral · Kimi · GLM · Gemma · Phi</div>
+    </div>
+  </div>
+  <div class="cards-grid">
+
+    <div class="card">
+      <div class="tt-btn" onclick="toggleTT(this)">?</div>
+      <div class="tt-box"><span class="tt-label">Comercial / Prospección</span>Monitorizar noticias sectoriales en tiempo real desde redes sociales, tendencias de mercado y movimientos de precios de referencia.</div>
+      <div class="card-ico"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3l0 7l6 0l-8 11l0 -7l-6 0l8 -11" /></svg></div>
+      <div class="card-name">Grok 4.3 (xAI)</div>
+      <div class="card-desc">2M ctx. X/Twitter real-time. Razonamiento + herramientas. $1.25/M tok.</div>
+      <div class="card-foot"><a class="card-link" href="https://x.ai/grok" target="_blank">x.ai/grok <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7l-10 10" /> <path d="M8 7l9 0l0 9" /></svg></a><span class="card-cat dot-n"></span></div>
+    </div>
+    <div class="card">
+      <div class="tt-btn" onclick="toggleTT(this)">?</div>
+      <div class="tt-box"><span class="tt-label">Datos / Ingeniería</span>Alternativa open-source de bajo coste para procesamiento masivo de datos técnicos, autoalojado para privacidad total de información de clientes.</div>
+      <div class="card-ico"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16.69 7.44a6.973 6.973 0 0 0 -1.69 4.56c0 1.747 .64 3.345 1.699 4.571" /> <path d="M2 9.504c7.715 8.647 14.75 10.265 20 2.498c-5.25 -7.761 -12.285 -6.142 -20 2.504" /> <path d="M18 11v.01" /> <path d="M11.5 10.5c-.667 1 -.667 2 0 3" /></svg></div>
+      <div class="card-name">DeepSeek V4 / R1</div>
+      <div class="card-desc">Open MIT. 85%+ GPQA Diamond. Ganó IMO, IOI, ICPC 2026.</div>
+      <div class="card-foot"><a class="card-link" href="https://deepseek.com" target="_blank">deepseek.com <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7l-10 10" /> <path d="M8 7l9 0l0 9" /></svg></a><span class="card-cat dot-o"></span></div>
+    </div>
+    <div class="card">
+      <div class="tt-btn" onclick="toggleTT(this)">?</div>
+      <div class="tt-box"><span class="tt-label">Datos / Arquitectura</span>Contexto de 10M tokens para analizar colecciones extensas de documentación técnica o fichas de producto completas en una sola sesión.</div>
+      <div class="card-ico"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 10.174c1.766 -2.784 3.315 -4.174 4.648 -4.174c2 0 3.263 2.213 4 5.217c.704 2.869 .5 6.783 -2 6.783c-1.114 0 -2.648 -1.565 -4.148 -3.652a27.627 27.627 0 0 1 -2.5 -4.174" /> <path d="M12 10.174c-1.766 -2.784 -3.315 -4.174 -4.648 -4.174c-2 0 -3.263 2.213 -4 5.217c-.704 2.869 -.5 6.783 2 6.783c1.114 0 2.648 -1.565 4.148 -3.652c1 -1.391 1.833 -2.783 2.5 -4.174" /></svg></div>
+      <div class="card-name">Llama 4 Scout / Maverick</div>
+      <div class="card-desc">Meta Apache 2.0. Scout: 10M ctx, 2600 tok/s. Maverick: multimodal.</div>
+      <div class="card-foot"><a class="card-link" href="https://llama.meta.com" target="_blank">llama.meta.com <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7l-10 10" /> <path d="M8 7l9 0l0 9" /></svg></a><span class="card-cat dot-o"></span></div>
+    </div>
+    <div class="card">
+      <div class="tt-btn" onclick="toggleTT(this)">?</div>
+      <div class="tt-box"><span class="tt-label">Datos / Análisis técnico</span>Cálculos técnicos en batch a bajo coste, normalización de unidades y formatos, clasificación automática de registros por categoría.</div>
+      <div class="card-ico"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2l0 -14" /> <path d="M8 8a1 1 0 0 1 1 -1h6a1 1 0 0 1 1 1v1a1 1 0 0 1 -1 1h-6a1 1 0 0 1 -1 -1l0 -1" /> <path d="M8 14l0 .01" /> <path d="M12 14l0 .01" /> <path d="M16 14l0 .01" /> <path d="M8 17l0 .01" /> <path d="M12 17l0 .01" /> <path d="M16 17l0 .01" /></svg></div>
+      <div class="card-name">Qwen 3.5 / 3.7 Max</div>
+      <div class="card-desc">Alibaba Apache 2.0. 97.1% HMMT 2026. Más barato del top-10.</div>
+      <div class="card-foot"><a class="card-link" href="https://qwenlm.github.io" target="_blank">qwenlm.github.io <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7l-10 10" /> <path d="M8 7l9 0l0 9" /></svg></a><span class="card-cat dot-o"></span></div>
+    </div>
+    <div class="card">
+      <div class="tt-btn" onclick="toggleTT(this)">?</div>
+      <div class="tt-box"><span class="tt-label">Consultoría / Datos</span>Procesamiento de datos sensibles de clientes bajo GDPR europeo, proyectos con requisito de residencia de datos en la UE.</div>
+      <div class="card-ico"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5a5 5 0 0 1 7 0a5 5 0 0 0 7 0v9a5 5 0 0 1 -7 0a5 5 0 0 0 -7 0v-9" /> <path d="M5 21v-7" /></svg></div>
+      <div class="card-name">Mistral Large 3 / Medium 3.5</div>
+      <div class="card-desc">EU-based. MoE 675B total. Multimodal. Infraestructura GDPR europea.</div>
+      <div class="card-foot"><a class="card-link" href="https://mistral.ai" target="_blank">mistral.ai <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7l-10 10" /> <path d="M8 7l9 0l0 9" /></svg></a><span class="card-cat dot-o"></span></div>
+    </div>
+    <div class="card">
+      <div class="tt-btn" onclick="toggleTT(this)">?</div>
+      <div class="tt-box"><span class="tt-label">Internacional / Comercial</span>Proyectos con socios asiáticos, análisis de mercados internacionales, documentación técnica en chino o japonés para certificaciones globales.</div>
+      <div class="card-ico"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454l0 .008" /></svg></div>
+      <div class="card-name">Kimi K2 (Moonshot AI)</div>
+      <div class="card-desc">Contexto largo. Multilingüe. Fuerte en Asia. Fintech + educación.</div>
+      <div class="card-foot"><a class="card-link" href="https://kimi.ai" target="_blank">kimi.ai <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7l-10 10" /> <path d="M8 7l9 0l0 9" /></svg></a><span class="card-cat dot-r"></span></div>
+    </div>
+    <div class="card">
+      <div class="tt-btn" onclick="toggleTT(this)">?</div>
+      <div class="tt-box"><span class="tt-label">Datos / Ingeniería</span>Pipeline de clasificación open-source sin coste por API, razonamiento técnico especializado, opción soberana para producción sin dependencia de terceros.</div>
+      <div class="card-ico"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 19a2 2 0 1 0 -4 0a2 2 0 0 0 4 0" /> <path d="M18 5a2 2 0 1 0 -4 0a2 2 0 0 0 4 0" /> <path d="M10 5a2 2 0 1 0 -4 0a2 2 0 0 0 4 0" /> <path d="M6 12a2 2 0 1 0 -4 0a2 2 0 0 0 4 0" /> <path d="M18 19a2 2 0 1 0 -4 0a2 2 0 0 0 4 0" /> <path d="M14 12a2 2 0 1 0 -4 0a2 2 0 0 0 4 0" /> <path d="M22 12a2 2 0 1 0 -4 0a2 2 0 0 0 4 0" /> <path d="M6 12h4" /> <path d="M14 12h4" /> <path d="M15 7l-2 3" /> <path d="M9 7l2 3" /> <path d="M11 14l-2 3" /> <path d="M13 14l2 3" /></svg></div>
+      <div class="card-name">GLM-5 / Z.AI</div>
+      <div class="card-desc">MIT license. Razonamiento multidisciplinar. Líder open-source chino.</div>
+      <div class="card-foot"><a class="card-link" href="https://z.ai" target="_blank">z.ai <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7l-10 10" /> <path d="M8 7l9 0l0 9" /></svg></a><span class="card-cat dot-o"></span></div>
+    </div>
+    <div class="card">
+      <div class="tt-btn" onclick="toggleTT(this)">?</div>
+      <div class="tt-box"><span class="tt-label">Arquitectura / Consultoría</span>Consultas de normativa técnica sin conexión en campo, privacidad total de datos de clientes, funciona en tablet sin datos móviles en zonas remotas.</div>
+      <div class="card-ico"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 5a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2v-14" /> <path d="M11 4h2" /> <path d="M12 17v.01" /></svg></div>
+      <div class="card-name">Gemma 3n (Google edge)</div>
+      <div class="card-desc">On-device sin nube. Optimizado para móvil. Privacidad total.</div>
+      <div class="card-foot"><a class="card-link" href="https://ai.google.dev/gemma" target="_blank">gemma <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7l-10 10" /> <path d="M8 7l9 0l0 9" /></svg></a><span class="card-cat dot-e"></span></div>
+    </div>
+    <div class="card">
+      <div class="tt-btn" onclick="toggleTT(this)">?</div>
+      <div class="tt-box"><span class="tt-label">Arquitectura / Consultoría</span>Consultas rápidas en campo integradas en el dispositivo, privacidad garantizada de datos sensibles, funciona offline en zonas sin cobertura.</div>
+      <div class="card-ico"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.319c0 3.102 .444 5.319 2.222 7.978c1.351 1.797 3.156 2.247 5.08 .988c.426 -.268 .97 -.268 1.397 0c1.923 1.26 3.728 .809 5.079 -.988c1.778 -2.66 2.222 -4.876 2.222 -7.977c0 -2.661 -1.99 -5.32 -4.444 -5.32c-1.267 0 -2.41 .693 -3.22 1.44a.5 .5 0 0 1 -.672 0c-.809 -.746 -1.953 -1.44 -3.22 -1.44c-2.454 0 -4.444 2.66 -4.444 5.319" /> <path d="M7 12c0 -1.47 .454 -2.34 1.5 -3" /> <path d="M12 7c0 -1.2 .867 -4 3 -4" /></svg></div>
+      <div class="card-name">Apple FM / Phi (Microsoft)</div>
+      <div class="card-desc">On-device + privacidad local. Phi: small reasoning. Apple: integrado iOS.</div>
+      <div class="card-foot"><a class="card-link" href="https://phi.microsoft.com" target="_blank">phi.microsoft.com <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7l-10 10" /> <path d="M8 7l9 0l0 9" /></svg></a><span class="card-cat dot-e"></span></div>
+    </div>
+  </div>
+</div>
+
+<div class="legend">
+  <div class="leg"><div class="leg-dot" style="background:var(--b1)"></div>Núcleo</div>
+  <div class="leg"><div class="leg-dot" style="background:var(--b2)"></div>Agente / Open</div>
+  <div class="leg"><div class="leg-dot" style="background:var(--b8)"></div>Multimodal</div>
+  <div class="leg"><div class="leg-dot" style="background:var(--b5)"></div>Dev</div>
+  <div class="leg"><div class="leg-dot" style="background:var(--b3)"></div>Integración</div>
+  <div class="leg"><div class="leg-dot" style="background:var(--b9)"></div>Regional</div>
+  <div class="leg"><div class="leg-dot" style="background:var(--b6)"></div>On-device</div>
+  <div class="leg" style="margin-left:auto;font-size:8.5px;color:var(--b5);">? = aplicación por área</div>
+</div>
+
+</div>
+<script>
+function toggleTT(btn){const box=btn.nextElementSibling;const open=box.classList.contains('open');document.querySelectorAll('.tt-box').forEach(b=>b.classList.remove('open'));if(!open)box.classList.add('open');}
+document.addEventListener('click',function(e){if(!e.target.closest('.tt-btn')&&!e.target.closest('.tt-box'))document.querySelectorAll('.tt-box').forEach(b=>b.classList.remove('open'));});
+</script>
+</body>
+</html>
